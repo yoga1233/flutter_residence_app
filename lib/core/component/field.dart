@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_residence_app/core/core.dart';
 
 enum FieldStyleType { password, email, text, number }
 
@@ -70,33 +71,54 @@ class _FieldState extends State<Field> {
   @override
   Widget build(BuildContext context) {
     return switch (widget.type) {
-      FieldStyleType.email => TextFormField(
-        controller: widget.controller,
-        obscureText: false,
-        validator: _validateEmail,
-        decoration: InputDecoration(
-          hintText: widget.hint,
-          labelText: widget.label ?? "email",
-          errorText: widget.error,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      ),
-      FieldStyleType.password => TextField(
-        controller: widget.controller,
-        obscureText: obscureText,
-        decoration: InputDecoration(
-          hintText: widget.hint,
-          labelText: widget.label ?? "password",
-          suffixIcon: IconButton(
-            icon: Icon(!obscureText ? Icons.visibility : Icons.visibility_off),
-            onPressed: () {
-              obscureText = !obscureText;
-              setState(() {});
-            },
+      FieldStyleType.email => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+
+        children: [
+          Text(widget.label ?? 'Your Email Account'),
+          6.height,
+          TextFormField(
+            controller: widget.controller,
+            obscureText: false,
+            validator: _validateEmail,
+            decoration: InputDecoration(
+              hintText: 'ahjgsjskk@kjjkdak.com',
+              // labelText: widget.label ?? "email",
+              errorText: widget.error,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
           ),
-          errorText: widget.error,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        ),
+        ],
+      ),
+      FieldStyleType.password => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Password'),
+          6.height,
+          TextField(
+            controller: widget.controller,
+            obscureText: obscureText,
+            decoration: InputDecoration(
+              hintText: '*********',
+              // labelText: widget.label ?? "password",
+              suffixIcon: IconButton(
+                icon: Icon(
+                  obscureText ? Icons.visibility_off : Icons.visibility,
+                ),
+                onPressed: () {
+                  obscureText = !obscureText;
+                  setState(() {});
+                },
+              ),
+              errorText: widget.error,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ],
       ),
       FieldStyleType.number => TextField(
         controller: widget.controller,

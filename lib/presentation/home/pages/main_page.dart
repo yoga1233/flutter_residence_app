@@ -29,12 +29,15 @@ class _MainPageState extends State<MainPage> {
         onPressed: () {
           context.push(ReportPage());
         },
-        child: SvgPicture.asset(Assets.icons.nav.add.path),
+        child: SvgPicture.asset(
+          Assets.icons.nav.add.path,
+          colorFilter: ColorFilter.mode(AppColors.primary, BlendMode.srcIn),
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
       bottomNavigationBar: BottomAppBar(
-        color: AppColors.backround,
+        color: Colors.white,
         shape: CircularNotchedRectangle(),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -49,21 +52,21 @@ class _MainPageState extends State<MainPage> {
             NavItem(
               iconPath: Assets.icons.nav.task.path,
               label: 'Status',
-              isActive: _selectedIndex == 0,
-              onTap: () => setState(() => _selectedIndex = 0),
+              isActive: _selectedIndex == 1,
+              onTap: () => setState(() => _selectedIndex = 1),
             ),
             10.width,
             NavItem(
               iconPath: Assets.icons.nav.browser.path,
               label: 'History',
-              isActive: _selectedIndex == 1,
-              onTap: () => setState(() => _selectedIndex = 1),
+              isActive: _selectedIndex == 2,
+              onTap: () => setState(() => _selectedIndex = 2),
             ),
             NavItem(
               iconPath: Assets.icons.nav.settings.path,
               label: 'Setting',
-              isActive: _selectedIndex == 2,
-              onTap: () => setState(() => _selectedIndex = 2),
+              isActive: _selectedIndex == 3,
+              onTap: () => setState(() => _selectedIndex = 3),
             ),
           ],
         ),
