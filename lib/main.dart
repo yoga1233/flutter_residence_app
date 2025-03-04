@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_residence_app/presentation/home/main_page.dart';
+import 'package:flutter_residence_app/presentation/auth/page/splash_page.dart';
+import 'package:flutter_residence_app/presentation/home/pages/main_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MainPage(),
+      home: SplashPage(),
     );
   }
 }
