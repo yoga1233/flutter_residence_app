@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_residence_app/core/core.dart';
+import 'package:flutter_residence_app/data/datasource/auth_local_datasource.dart';
 import 'package:flutter_residence_app/presentation/home/widget/home_icon.dart';
 import 'package:flutter_residence_app/presentation/home/widget/news_card.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,7 +49,8 @@ class HomePage extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Yoga Pamungkas',
+                            AuthLocalDatasource.userData!.response!.username!
+                                .toUpperCase(),
                             style: TextStyle(
                               color: AppColors.backround,
                               fontSize: 24,

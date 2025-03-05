@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_residence_app/core/core.dart';
-import 'package:flutter_residence_app/presentation/auth/page/login_page.dart';
+import 'package:flutter_residence_app/data/datasource/auth_local_datasource.dart';
+import 'package:flutter_residence_app/data/datasource/auth_remote_datasource.dart';
+import 'package:flutter_residence_app/presentation/auth/bloc/login/login_bloc.dart';
 import 'package:flutter_residence_app/presentation/auth/page/splash_page.dart';
-import 'package:flutter_residence_app/presentation/home/pages/main_page.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
@@ -13,27 +15,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        fontFamily: "Poppins",
-        textSelectionTheme: TextSelectionThemeData(
-          cursorColor: AppColors.primary,
-        ),
-        inputDecorationTheme: InputDecorationTheme(
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AppColors.primary,
-              width: 2.0,
-            ), // Ubah warna di sini
-          ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => LoginBloc(AuthRemoteDatasource())),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          fontFamily: "Poppins",
 
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.navInActive, width: 1.0),
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: AppColors.primary,
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: AppColors.primary,
+                width: 2.0,
+              ), // Ubah warna di sini
+            ),
+
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.navInActive, width: 1.0),
+            ),
           ),
         ),
+        home: SplashPage(),
       ),
-      home: LoginPage(),
     );
   }
 }

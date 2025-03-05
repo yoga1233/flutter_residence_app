@@ -45,3 +45,9 @@ extension NavigatorExt on BuildContext {
     );
   }
 }
+
+extension ScaffoldMessenggerExt on BuildContext {
+  void showErrorSnackbar(String message) => ScaffoldMessenger.of(
+    this,
+  ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+}

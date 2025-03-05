@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_residence_app/core/constant/colors.dart';
 import 'package:flutter_residence_app/core/extensions/build_context_ext.dart';
+import 'package:flutter_residence_app/data/datasource/auth_local_datasource.dart';
+import 'package:flutter_residence_app/presentation/auth/page/login_page.dart';
 import 'package:flutter_residence_app/presentation/home/pages/main_page.dart';
 
 class SplashPage extends StatelessWidget {
@@ -8,9 +10,14 @@ class SplashPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 2), () async {
+      await AuthLocalDatasource().getAuthData();
       if (context.mounted) {
-        context.pushReplacement(MainPage());
+        if (AuthLocalDatasource.userData == null) {
+          context.pushReplacement(LoginPage());
+        } else {
+          context.pushReplacement(MainPage());
+        }
       }
     });
     return Scaffold(

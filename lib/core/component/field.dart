@@ -59,12 +59,17 @@ class _FieldState extends State<Field> {
     if (value == null || value.isEmpty) {
       return 'Please enter your email';
     }
-    final RegExp emailRegex = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}\$',
-    );
-    if (!emailRegex.hasMatch(value)) {
-      return 'Please enter a valid email address';
+    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+      return 'Please enter a valid email';
     }
+    return null;
+  }
+
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your password';
+    }
+
     return null;
   }
 
@@ -78,9 +83,11 @@ class _FieldState extends State<Field> {
           Text(widget.label ?? 'Your Email Account'),
           6.height,
           TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: widget.controller,
             obscureText: false,
             validator: _validateEmail,
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               hintText: 'ahjgsjskk@kjjkdak.com',
               // labelText: widget.label ?? "email",
@@ -97,7 +104,9 @@ class _FieldState extends State<Field> {
         children: [
           Text('Password'),
           6.height,
-          TextField(
+          TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            validator: _validatePassword,
             controller: widget.controller,
             obscureText: obscureText,
             decoration: InputDecoration(
