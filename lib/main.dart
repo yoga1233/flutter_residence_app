@@ -5,6 +5,7 @@ import 'package:flutter_residence_app/core/core.dart';
 import 'package:flutter_residence_app/core/network/dio_client.dart';
 import 'package:flutter_residence_app/data/datasource/auth_remote_datasource.dart';
 import 'package:flutter_residence_app/presentation/auth/bloc/login/login_bloc.dart';
+import 'package:flutter_residence_app/presentation/auth/bloc/register/register_bloc.dart';
 import 'package:flutter_residence_app/presentation/auth/page/splash_page.dart';
 
 void main() async {
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => LoginBloc(AuthRemoteDatasource())),
+        BlocProvider(create: (context) => RegisterBloc(AuthRemoteDatasource())),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

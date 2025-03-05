@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_residence_app/core/constant/colors.dart';
 
 extension BuildContextExt on BuildContext {
   double get deviceHeight => MediaQuery.of(this).size.height;
@@ -50,4 +51,8 @@ extension ScaffoldMessenggerExt on BuildContext {
   void showErrorSnackbar(String message) => ScaffoldMessenger.of(
     this,
   ).showSnackBar(SnackBar(content: Text(message), backgroundColor: Colors.red));
+  void showSuccessSnackbar(String message) =>
+      ScaffoldMessenger.of(this).showSnackBar(
+        SnackBar(content: Text(message), backgroundColor: AppColors.primary),
+      );
 }

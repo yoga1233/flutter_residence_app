@@ -6,6 +6,7 @@ import 'package:flutter_residence_app/core/constant/colors.dart';
 import 'package:flutter_residence_app/core/extensions/extensions.dart';
 import 'package:flutter_residence_app/data/datasource/auth_local_datasource.dart';
 import 'package:flutter_residence_app/presentation/auth/bloc/login/login_bloc.dart';
+import 'package:flutter_residence_app/presentation/auth/page/register_page.dart';
 import 'package:flutter_residence_app/presentation/home/pages/main_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -110,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       },
                     ),
-                    Spacer(),
+                    20.height,
                     //text dont have an account
                     Center(
                       child: RichText(
@@ -122,13 +123,13 @@ class _LoginPageState extends State<LoginPage> {
                             TextSpan(
                               text: ' Register',
                               style: TextStyle(
-                                color: Colors.blueAccent,
+                                color: AppColors.secondary,
                                 fontSize: 18,
                               ),
                               recognizer:
                                   TapGestureRecognizer()
                                     ..onTap = () {
-                                      // navigate to desired screen
+                                      context.push(RegisterPage());
                                     },
                             ),
                           ],

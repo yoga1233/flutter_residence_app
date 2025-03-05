@@ -12,6 +12,7 @@ class Field extends StatefulWidget {
 
     this.hint,
     this.error,
+    this.validator,
   });
   const Field.email({
     super.key,
@@ -21,6 +22,7 @@ class Field extends StatefulWidget {
 
     this.hint,
     this.error,
+    this.validator,
   });
   const Field.password({
     super.key,
@@ -30,6 +32,7 @@ class Field extends StatefulWidget {
 
     this.hint,
     this.error,
+    this.validator,
   });
   const Field.number({
     super.key,
@@ -39,11 +42,13 @@ class Field extends StatefulWidget {
 
     this.hint,
     this.error,
+    this.validator,
   });
 
   final String? label;
   final FieldStyleType type;
   final TextEditingController? controller;
+  final String? Function(String?)? validator;
 
   final String? hint;
   final String? error;
@@ -53,7 +58,7 @@ class Field extends StatefulWidget {
 }
 
 class _FieldState extends State<Field> {
-  bool obscureText = false;
+  bool obscureText = true;
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
@@ -86,7 +91,7 @@ class _FieldState extends State<Field> {
             autovalidateMode: AutovalidateMode.onUserInteraction,
             controller: widget.controller,
             obscureText: false,
-            validator: _validateEmail,
+            validator: widget.validator ?? _validateEmail,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               hintText: 'ahjgsjskk@kjjkdak.com',
@@ -102,11 +107,11 @@ class _FieldState extends State<Field> {
       FieldStyleType.password => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Password'),
+          Text(widget.label ?? 'Password'),
           6.height,
           TextFormField(
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            validator: _validatePassword,
+            validator: widget.validator ?? _validatePassword,
             controller: widget.controller,
             obscureText: obscureText,
             decoration: InputDecoration(
@@ -140,15 +145,27 @@ class _FieldState extends State<Field> {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
       ),
-      FieldStyleType.text => TextField(
-        controller: widget.controller,
-        obscureText: false,
-        decoration: InputDecoration(
-          hintText: widget.hint,
-          labelText: widget.label ?? "text",
-          errorText: widget.error,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        ),
+      FieldStyleType.text => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(widget.label ?? 'text'),
+          6.height,
+          TextFormField(
+            autovalidateMode: AutovalidateMode.onUserInteraction,
+            controller: widget.controller,
+            obscureText: false,
+            validator: widget.validator,
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              hintText: 'Your name',
+              // labelText: widget.label ?? "email",
+              errorText: widget.error,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ],
       ),
     };
   }
