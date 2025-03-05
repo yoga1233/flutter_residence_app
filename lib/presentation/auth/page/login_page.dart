@@ -9,14 +9,19 @@ import 'package:flutter_residence_app/presentation/auth/bloc/login/login_bloc.da
 import 'package:flutter_residence_app/presentation/home/pages/main_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
   @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController emailController = TextEditingController(text: '');
+  TextEditingController passController = TextEditingController(text: '');
+  final formKey = GlobalKey<FormState>(); //
+  @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController(text: '');
-    TextEditingController passController = TextEditingController(text: '');
-    final formKey = GlobalKey<FormState>(); //
     return Scaffold(
       backgroundColor: AppColors.backround,
       body: Stack(
