@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_residence_app/core/core.dart';
 import 'package:flutter_residence_app/data/datasource/auth_local_datasource.dart';
+import 'package:flutter_residence_app/presentation/home/bloc/news/news_bloc.dart';
 import 'package:flutter_residence_app/presentation/home/widget/home_icon.dart';
 import 'package:flutter_residence_app/presentation/home/widget/news_card.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    context.read<NewsBloc>().add(NewsEvent.getNews());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,36 +157,28 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                   20.height,
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: [
-                        NewsCard(
-                          label: 'Pohon Tumbang',
-                          createAt: '22 des 2024',
-                          desc:
-                              'Pohon tumbang menghantam sebuah mobil di jalan kembangsari',
-                          imgUrl:
-                              'https://awsimages.detik.net.id/community/media/visual/2021/12/23/pohon-tumbang-timpa-mobil-di-tangerang-akibat-hujan-disertai-angin-kencang_169.jpeg?w=1200',
-                        ),
-                        NewsCard(
-                          label: 'Pohon Tumbang',
-                          createAt: '22 des 2024',
-                          desc:
-                              'Pohon tumbang menghantam sebuah mobil di jalan kembangsari',
-                          imgUrl:
-                              'https://awsimages.detik.net.id/community/media/visual/2021/12/23/pohon-tumbang-timpa-mobil-di-tangerang-akibat-hujan-disertai-angin-kencang_169.jpeg?w=1200',
-                        ),
-                        NewsCard(
-                          label: 'Pohon Tumbang',
-                          createAt: '22 des 2024',
-                          desc:
-                              'Pohon tumbang menghantam sebuah mobil di jalan kembangsari',
-                          imgUrl:
-                              'https://awsimages.detik.net.id/community/media/visual/2021/12/23/pohon-tumbang-timpa-mobil-di-tangerang-akibat-hujan-disertai-angin-kencang_169.jpeg?w=1200',
-                        ),
-                      ],
-                    ),
+                  BlocBuilder<NewsBloc, NewsState>(
+                    builder: (context, state) {
+                      return state.maybeWhen(
+                        orElse: () => SizedBox(),
+                        success:
+                            (data) => SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  ...data.response!.map(
+                                    (e) => NewsCard(
+                                      label: e.title!,
+                                      createAt: e.createdAt!.toIso8601String(),
+                                      desc: e.content!,
+                                      imgUrl: 'ee',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                      );
+                    },
                   ),
                 ],
               ),

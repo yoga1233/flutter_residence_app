@@ -1,21 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_residence_app/core/component/button.dart';
 import 'package:flutter_residence_app/core/component/field.dart';
 import 'package:flutter_residence_app/core/constant/colors.dart';
 import 'package:flutter_residence_app/core/extensions/extensions.dart';
-import 'package:flutter_residence_app/data/datasource/auth_local_datasource.dart';
-import 'package:flutter_residence_app/presentation/auth/bloc/login/login_bloc.dart';
-import 'package:flutter_residence_app/presentation/home/pages/main_page.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HistoryPage extends StatelessWidget {
   const HistoryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController emailController = TextEditingController(text: '');
-    TextEditingController passController = TextEditingController(text: '');
     // final formKey = GlobalKey<FormState>();
     return Scaffold(
       backgroundColor: AppColors.backround,

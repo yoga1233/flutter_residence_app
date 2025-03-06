@@ -18,6 +18,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController cPassword = TextEditingController(text: '');
   final TextEditingController cReEnterPass = TextEditingController(text: '');
 
+  final formKey = GlobalKey<FormState>();
+
   String? _validateReEnterPassword(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your password';
@@ -64,109 +66,118 @@ class _RegisterPageState extends State<RegisterPage> {
                   horizontal: 24,
                   vertical: 30,
                 ),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      100.height,
-                      Text(
-                        'Hey, There\nregister your account here!',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.text,
-                        ),
-                      ),
-                      8.height,
-                      Text(
-                        'Enter your data to register the apps',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.subtittle,
-                        ),
-                      ),
-                      50.height,
-                      Field.text(
-                        controller: cUsername,
-                        label: 'Username',
-                        validator: _validateUsername,
-                      ),
-                      20.height,
-                      Field.email(controller: cEmail, label: 'Email Address'),
-                      20.height,
-                      Field.password(controller: cPassword),
-                      20.height,
-                      Field.password(
-                        controller: cReEnterPass,
-                        label: 'Re enter Password',
-                        validator: _validateReEnterPassword,
-                      ),
-                      30.height,
-                      BlocConsumer<RegisterBloc, RegisterState>(
-                        listener: (context, state) {
-                          state.maybeWhen(
-                            orElse: () {},
-                            success: () {
-                              context
-                                ..showSuccessSnackbar('Register Success')
-                                ..pop();
-                            },
-                            failed:
-                                (error) => context.showErrorSnackbar(
-                                  'failed to register',
-                                ),
-                          );
-                        },
-                        builder: (context, state) {
-                          return state.maybeWhen(
-                            loading:
-                                () =>
-                                    Center(child: CircularProgressIndicator()),
-                            orElse:
-                                () => Button.filled(
-                                  onPressed: () {
-                                    context.read<RegisterBloc>().add(
-                                      RegisterEvent.register(
-                                        username: cUsername.text,
-                                        email: cEmail.text,
-                                        password: cReEnterPass.text,
-                                      ),
-                                    );
-                                  },
-                                  label: 'Register',
-                                  borderRadius: 8,
-                                ),
-                          );
-                        },
-                      ),
-
-                      20.height, //text dont have an account
-                      Center(
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: 'have an account?',
-                            style: TextStyle(color: Colors.black, fontSize: 18),
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: ' Login',
-                                style: TextStyle(
-                                  color: AppColors.secondary,
-                                  fontSize: 18,
-                                ),
-                                recognizer:
-                                    TapGestureRecognizer()
-                                      ..onTap = () {
-                                        context.pushReplacement(LoginPage());
-                                      },
-                              ),
-                            ],
+                child: Form(
+                  key: formKey,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        100.height,
+                        Text(
+                          'Hey, There\nregister your account and data here!',
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.text,
                           ),
                         ),
-                      ),
-                    ],
+                        8.height,
+                        Text(
+                          'Enter your data to register and use the fully apps',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.subtittle,
+                          ),
+                        ),
+                        50.height,
+                        Field.text(
+                          controller: cUsername,
+                          label: 'Username',
+                          validator: _validateUsername,
+                        ),
+                        20.height,
+                        Field.email(controller: cEmail, label: 'Email Address'),
+                        20.height,
+                        Field.password(controller: cPassword),
+                        20.height,
+                        Field.password(
+                          controller: cReEnterPass,
+                          label: 'Re enter Password',
+                          validator: _validateReEnterPassword,
+                        ),
+                        30.height,
+                        BlocConsumer<RegisterBloc, RegisterState>(
+                          listener: (context, state) {
+                            state.maybeWhen(
+                              orElse: () {},
+                              success: () {
+                                context
+                                  ..showSuccessSnackbar('Register Success')
+                                  ..pop();
+                              },
+                              failed:
+                                  (error) => context.showErrorSnackbar(
+                                    'failed to register',
+                                  ),
+                            );
+                          },
+                          builder: (context, state) {
+                            return state.maybeWhen(
+                              loading:
+                                  () => Center(
+                                    child: CircularProgressIndicator(),
+                                  ),
+                              orElse:
+                                  () => Button.filled(
+                                    onPressed: () {
+                                      if (formKey.currentState!.validate()) {
+                                        context.read<RegisterBloc>().add(
+                                          RegisterEvent.register(
+                                            username: cUsername.text,
+                                            email: cEmail.text,
+                                            password: cReEnterPass.text,
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    label: 'Register',
+                                    borderRadius: 8,
+                                  ),
+                            );
+                          },
+                        ),
+
+                        20.height, //text dont have an account
+                        Center(
+                          child: RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: 'have an account?',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 18,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: ' Login',
+                                  style: TextStyle(
+                                    color: AppColors.secondary,
+                                    fontSize: 18,
+                                  ),
+                                  recognizer:
+                                      TapGestureRecognizer()
+                                        ..onTap = () {
+                                          context.pushReplacement(LoginPage());
+                                        },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

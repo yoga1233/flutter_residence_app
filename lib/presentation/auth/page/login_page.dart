@@ -20,7 +20,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController(text: '');
   TextEditingController passController = TextEditingController(text: '');
-  final formKey = GlobalKey<FormState>(); //
+  final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
