@@ -8,7 +8,7 @@ class NewsRemoteDatasource {
   final dioClient = DioClient();
 
   Future<Either<String, NewsResponseModel>> getNews() async {
-    final response = await dioClient.get('/news');
+    final response = await dioClient.get('/news/5');
 
     if (response.statusCode == 200) {
       return right(NewsResponseModel.fromJson(jsonEncode(response.data)));

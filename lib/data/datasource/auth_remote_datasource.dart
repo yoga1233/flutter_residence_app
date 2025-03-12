@@ -12,12 +12,16 @@ class AuthRemoteDatasource {
   Future<Either<String, AuthResponseModel>> login(
     LoginRequestModel data,
   ) async {
-    final response = await dioClient.post('/auth/login', data: data.toJson());
+    try {
+      final response = await dioClient.post('/auth/login', data: data.toJson());
 
-    if (response.statusCode == 200) {
-      return right(AuthResponseModel.fromJson(jsonEncode(response.data)));
-    } else {
-      return left('Failed to login');
+      if (response.statusCode == 200) {
+        return right(AuthResponseModel.fromJson(jsonEncode(response.data)));
+      } else {
+        return left('Failed to login');
+      }
+    } catch (e) {
+      return left(e.toString());
     }
   }
 

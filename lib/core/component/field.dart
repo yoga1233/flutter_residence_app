@@ -13,6 +13,7 @@ class Field extends StatefulWidget {
     this.hint,
     this.error,
     this.validator,
+    this.maxline,
   });
   const Field.email({
     super.key,
@@ -23,6 +24,7 @@ class Field extends StatefulWidget {
     this.hint,
     this.error,
     this.validator,
+    this.maxline,
   });
   const Field.password({
     super.key,
@@ -33,6 +35,7 @@ class Field extends StatefulWidget {
     this.hint,
     this.error,
     this.validator,
+    this.maxline,
   });
   const Field.number({
     super.key,
@@ -43,12 +46,14 @@ class Field extends StatefulWidget {
     this.hint,
     this.error,
     this.validator,
+    this.maxline,
   });
 
   final String? label;
   final FieldStyleType type;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
+  final int? maxline;
 
   final String? hint;
   final String? error;
@@ -156,8 +161,9 @@ class _FieldState extends State<Field> {
             obscureText: false,
             validator: widget.validator,
             keyboardType: TextInputType.emailAddress,
+            maxLines: widget.maxline,
             decoration: InputDecoration(
-              hintText: 'Your name',
+              hintText: widget.hint ?? 'Your name',
               // labelText: widget.label ?? "email",
               errorText: widget.error,
               border: OutlineInputBorder(

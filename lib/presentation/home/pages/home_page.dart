@@ -5,6 +5,7 @@ import 'package:flutter_residence_app/data/datasource/auth_local_datasource.dart
 import 'package:flutter_residence_app/presentation/home/bloc/news/news_bloc.dart';
 import 'package:flutter_residence_app/presentation/home/widget/home_icon.dart';
 import 'package:flutter_residence_app/presentation/home/widget/news_card.dart';
+import 'package:flutter_residence_app/presentation/home/widget/news_card_shimmer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class HomePage extends StatefulWidget {
@@ -161,6 +162,17 @@ class _HomePageState extends State<HomePage> {
                     builder: (context, state) {
                       return state.maybeWhen(
                         orElse: () => SizedBox(),
+                        loading:
+                            () => SizedBox(
+                              height: 350,
+                              child: ListView.builder(
+                                // shrinkWrap: true,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder:
+                                    (context, index) => NewsCardShimmer(),
+                                itemCount: 5,
+                              ),
+                            ),
                         success:
                             (data) => SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
@@ -171,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                                       label: e.title!,
                                       createAt: e.createdAt!.toIso8601String(),
                                       desc: e.content!,
-                                      imgUrl: 'ee',
+                                      imgUrl: e.imageUrl!,
                                     ),
                                   ),
                                 ],

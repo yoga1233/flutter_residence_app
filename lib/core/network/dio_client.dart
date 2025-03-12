@@ -12,13 +12,13 @@ class DioClient {
   DioClient._internal() {
     dio = Dio(
       BaseOptions(
-        baseUrl: Variable.baseUrl, // Ganti dengan base URL API kamu
+        baseUrl: Variable.baseUrl,
         connectTimeout: const Duration(seconds: 10),
         receiveTimeout: const Duration(seconds: 5),
+        headers: {"Content-Type": "application/json"},
       ),
     );
 
-    // Tambahkan Interceptor untuk menyisipkan Token dan menangani error
     dio.interceptors.addAll([
       InterceptorsWrapper(
         onRequest: (options, handler) {
@@ -26,13 +26,20 @@ class DioClient {
           if (token != null) {
             options.headers["Authorization"] = "Bearer $token";
           }
-          options.headers["Content-Type"] = "application/json";
           return handler.next(options);
         },
-        onError: (DioException e, handler) {
-          if (e.response?.statusCode == 401) {
-            // Token expired, bisa refresh token di sini
+        onResponse: (response, handler) {
+          return handler.next(response);
+        },
+        onError: (e, handler) {
+          String errorMessage =
+              e.response?.data["metadata"]["message"] ?? "Unauthorized";
+          if (errorMessage.contains('Unauthorized')) {
+            // Coba refresh token
+
+            throw Exception("Session expired");
           }
+
           return handler.next(e);
         },
       ),
@@ -40,48 +47,69 @@ class DioClient {
     ]);
   }
 
-  // GET Request
+  /// GET Request
   Future<Response> get(String path, {Map<String, dynamic>? queryParams}) async {
     try {
       return await dio.get(path, queryParameters: queryParams);
-    } catch (e) {
-      throw Exception("GET Error: $e");
+    } on DioException catch (e) {
+      return _handleDioError(e);
     }
   }
 
-  // POST Request
+  /// POST Request
   Future<Response> post(String path, {dynamic data}) async {
     try {
       return await dio.post(path, data: data);
-    } catch (e) {
-      throw Exception("POST Error: $e");
+    } on DioException catch (e) {
+      return _handleDioError(e);
     }
   }
 
-  // PUT Request
+  /// PUT Request
   Future<Response> put(String path, {dynamic data}) async {
     try {
       return await dio.put(path, data: data);
-    } catch (e) {
-      throw Exception("PUT Error: $e");
+    } on DioException catch (e) {
+      return _handleDioError(e);
     }
   }
 
-  // PATCH Request
+  /// PATCH Request
   Future<Response> patch(String path, {dynamic data}) async {
     try {
       return await dio.patch(path, data: data);
-    } catch (e) {
-      throw Exception("PATCH Error: $e");
+    } on DioException catch (e) {
+      return _handleDioError(e);
     }
   }
 
-  // DELETE Request
+  /// DELETE Request
   Future<Response> delete(String path) async {
     try {
       return await dio.delete(path);
-    } catch (e) {
-      throw Exception("DELETE Error: $e");
+    } on DioException catch (e) {
+      return _handleDioError(e);
+    }
+  }
+
+  /// Handler untuk menangani error dari DioException
+  Response _handleDioError(DioException e) {
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+        throw "Connection timeout, please try again later.";
+      case DioExceptionType.receiveTimeout:
+        throw "Server is not responding, please try again.";
+      case DioExceptionType.badResponse:
+        if (e.response?.statusCode == 401) {
+          String errorMessage =
+              e.response?.data["metadata"]["message"] ?? "Unauthorized access.";
+          throw errorMessage;
+        }
+        throw "Server error: ${e.response?.statusCode}";
+      case DioExceptionType.cancel:
+        throw "Request has been canceled.";
+      default:
+        throw "An unexpected error occurred: ${e.message}";
     }
   }
 }
