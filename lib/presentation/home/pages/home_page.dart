@@ -158,7 +158,13 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   20.height,
-                  BlocBuilder<NewsBloc, NewsState>(
+                  BlocConsumer<NewsBloc, NewsState>(
+                    listener: (context, state) {
+                      state.maybeWhen(
+                        orElse: () {},
+                        failed: (error) => context.showErrorSnackbar(error),
+                      );
+                    },
                     builder: (context, state) {
                       return state.maybeWhen(
                         orElse: () => SizedBox(),

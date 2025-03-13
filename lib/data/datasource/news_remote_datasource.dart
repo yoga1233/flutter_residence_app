@@ -8,12 +8,16 @@ class NewsRemoteDatasource {
   final dioClient = DioClient();
 
   Future<Either<String, NewsResponseModel>> getNews() async {
-    final response = await dioClient.get('/news/5');
+    try {
+      final response = await dioClient.get('/news/5');
 
-    if (response.statusCode == 200) {
-      return right(NewsResponseModel.fromJson(jsonEncode(response.data)));
-    } else {
-      return left('Enable to load news data');
+      if (response.statusCode == 200) {
+        return right(NewsResponseModel.fromJson(jsonEncode(response.data)));
+      } else {
+        return left('Enable to load news data');
+      }
+    } catch (e) {
+      return left(e.toString());
     }
   }
 }

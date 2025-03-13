@@ -1,7 +1,14 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_residence_app/core/constant/constant.dart';
+import 'package:flutter_residence_app/core/core.dart';
+import 'package:flutter_residence_app/core/service/navigation_service.dart';
 import 'package:flutter_residence_app/data/datasource/auth_local_datasource.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+
+import '../../presentation/auth/page/login_page.dart';
 
 class DioClient {
   static final DioClient _instance = DioClient._internal();
@@ -32,12 +39,10 @@ class DioClient {
           return handler.next(response);
         },
         onError: (e, handler) {
-          String errorMessage =
-              e.response?.data["metadata"]["message"] ?? "Unauthorized";
-          if (errorMessage.contains('Unauthorized')) {
-            // Coba refresh token
+          log(e.error.toString());
 
-            throw Exception("Session expired");
+          if (e.response.toString().contains('Unauthorized')) {
+            showSessionExpiredDialog(NavigationService.context!);
           }
 
           return handler.next(e);
@@ -104,12 +109,38 @@ class DioClient {
           String errorMessage =
               e.response?.data["metadata"]["message"] ?? "Unauthorized access.";
           throw errorMessage;
+        } else {
+          throw "Server error: ${e.response?.statusCode}, ${e.response?.data}";
         }
-        throw "Server error: ${e.response?.statusCode}";
+
       case DioExceptionType.cancel:
         throw "Request has been canceled.";
       default:
         throw "An unexpected error occurred: ${e.message}";
     }
   }
+}
+
+void showSessionExpiredDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, // Dialog tidak bisa ditutup dengan klik di luar
+    builder: (context) {
+      return AlertDialog(
+        title: Text("Session Expired"),
+        content: Text("Your session has expired. Please log in again."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              context.pop(); // Tutup dialog
+              AuthLocalDatasource().removeAuthData();
+              context.pushReplacement(LoginPage()); // Tutup dialog
+              // Panggil fungsi logout
+            },
+            child: Text("OK"),
+          ),
+        ],
+      );
+    },
+  );
 }
