@@ -17,17 +17,24 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-  final _page = [HomePage(), StatusPage(), HistoryPage(), SettingPage()];
+
+  final List<Widget> _pages = const [
+    HomePage(),
+    StatusPage(),
+    HistoryPage(),
+    SettingPage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.backround,
+
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.backround,
-        shape: CircleBorder(),
+        shape: const CircleBorder(),
         onPressed: () {
-          context.push(ReportPage());
+          context.push(const ReportPage());
         },
         child: SvgPicture.asset(
           Assets.icons.nav.add.path,
@@ -38,40 +45,44 @@ class _MainPageState extends State<MainPage> {
 
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,
-        shape: CircularNotchedRectangle(),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-          children: [
-            NavItem(
-              iconPath: Assets.icons.nav.home.path,
-              label: 'Home',
-              isActive: _selectedIndex == 0,
-              onTap: () => setState(() => _selectedIndex = 0),
-            ),
-            NavItem(
-              iconPath: Assets.icons.nav.task.path,
-              label: 'Status',
-              isActive: _selectedIndex == 1,
-              onTap: () => setState(() => _selectedIndex = 1),
-            ),
-            10.width,
-            NavItem(
-              iconPath: Assets.icons.nav.browser.path,
-              label: 'History',
-              isActive: _selectedIndex == 2,
-              onTap: () => setState(() => _selectedIndex = 2),
-            ),
-            NavItem(
-              iconPath: Assets.icons.nav.settings.path,
-              label: 'Setting',
-              isActive: _selectedIndex == 3,
-              onTap: () => setState(() => _selectedIndex = 3),
-            ),
-          ],
+        shape: const CircularNotchedRectangle(),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              NavItem(
+                iconPath: Assets.icons.nav.home.path,
+                label: 'Home',
+                isActive: _selectedIndex == 0,
+                onTap: () => setState(() => _selectedIndex = 0),
+              ),
+              NavItem(
+                iconPath: Assets.icons.nav.task.path,
+                label: 'Status',
+                isActive: _selectedIndex == 1,
+                onTap: () => setState(() => _selectedIndex = 1),
+              ),
+              const SizedBox(width: 40), // Beri jarak untuk FAB
+              NavItem(
+                iconPath: Assets.icons.nav.browser.path,
+                label: 'History',
+                isActive: _selectedIndex == 2,
+                onTap: () => setState(() => _selectedIndex = 2),
+              ),
+              NavItem(
+                iconPath: Assets.icons.nav.settings.path,
+                label: 'Setting',
+                isActive: _selectedIndex == 3,
+                onTap: () => setState(() => _selectedIndex = 3),
+              ),
+            ],
+          ),
         ),
       ),
-      body: _page[_selectedIndex],
+
+      // Menggunakan IndexedStack agar state setiap halaman tetap terjaga
+      body: IndexedStack(index: _selectedIndex, children: _pages),
     );
   }
 }

@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_residence_app/core/constant/constant.dart';
 import 'package:flutter_residence_app/core/core.dart';
 import 'package:flutter_residence_app/core/service/navigation_service.dart';
 import 'package:flutter_residence_app/data/datasource/auth_local_datasource.dart';

@@ -19,7 +19,8 @@ class NavItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-
+      highlightColor: Colors.transparent,
+      splashColor: Colors.transparent,
       child: Column(
         children: [
           SizedBox(

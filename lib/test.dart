@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 void main() {
@@ -5,7 +6,7 @@ void main() {
   for (var dir in dirs) {
     if (dir is File) {
       if (dir.path.contains(',')) {
-        print(dir.path);
+        log(dir.path);
       }
     }
   }

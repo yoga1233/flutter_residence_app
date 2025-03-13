@@ -23,8 +23,8 @@ final formKey = GlobalKey<FormState>();
 class _ReportPageState extends State<ReportPage> {
   @override
   void dispose() {
-    cTitle.dispose();
-    cDesc.dispose();
+    cTitle.text = '';
+    cDesc.text = '';
     _image = null;
     super.dispose();
   }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_residence_app/core/core.dart';
@@ -15,7 +17,8 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     context.read<NewsBloc>().add(NewsEvent.getNews());
@@ -23,7 +26,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    log("HomePage didChangeDependencies dipanggil");
+  }
+
+  @override
+  bool get wantKeepAlive => false; // Set false agar tidak di-cache
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: AppColors.backround,
       body: Stack(
